@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">DocPod Architecture</title>
+  <desc id="desc">A read-only architecture overview showing template, generation, policy, and output flow.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fffdf7"/>
+      <stop offset="100%" stop-color="#fff6e9"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff914d"/>
+      <stop offset="100%" stop-color="#ffbd59"/>
+    </linearGradient>
+    <style>
+      .box{fill:#fff;stroke:#efddc8;stroke-width:2;rx:18}
+      .title{font:700 26px Poppins,Arial,sans-serif;fill:#2a190d}
+      .text{font:500 17px Poppins,Arial,sans-serif;fill:#6d5341}
+      .cap{font:700 14px Poppins,Arial,sans-serif;fill:#92491b;letter-spacing:.08em;text-transform:uppercase}
+      .line{stroke:url(#accent);stroke-width:3;fill:none;stroke-linecap:round}
+      .dot{fill:#ff9f56}
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" fill="url(#bg)"/>
+
+  <text x="70" y="72" class="title">DocPod: Template-to-Document Architecture</text>
+  <text x="70" y="102" class="text">Read-only flow for enterprise document generation</text>
+
+  <rect x="70" y="170" width="250" height="140" class="box"/>
+  <text x="95" y="205" class="cap">Input Layer</text>
+  <text x="95" y="235" class="title" style="font-size:22px">Template Rail</text>
+  <text x="95" y="262" class="text">Reusable forms</text>
+  <text x="95" y="286" class="text">Variable mapping</text>
+
+  <rect x="370" y="170" width="250" height="140" class="box"/>
+  <text x="395" y="205" class="cap">Context Layer</text>
+  <text x="395" y="235" class="title" style="font-size:22px">Knowledge Inputs</text>
+  <text x="395" y="262" class="text">Policies</text>
+  <text x="395" y="286" class="text">Reference docs</text>
+
+  <rect x="670" y="170" width="250" height="140" class="box"/>
+  <text x="695" y="205" class="cap">Core Layer</text>
+  <text x="695" y="235" class="title" style="font-size:22px">Generation Engine</text>
+  <text x="695" y="262" class="text">Prompt orchestration</text>
+  <text x="695" y="286" class="text">Model controls</text>
+
+  <rect x="970" y="170" width="160" height="140" class="box"/>
+  <text x="995" y="205" class="cap">Output</text>
+  <text x="995" y="235" class="title" style="font-size:22px">Drafts</text>
+  <text x="995" y="262" class="text">DOCX/PDF</text>
+
+  <rect x="270" y="430" width="300" height="180" class="box"/>
+  <text x="295" y="468" class="cap">Governance</text>
+  <text x="295" y="500" class="title" style="font-size:22px">Policy + Approval Checks</text>
+  <text x="295" y="528" class="text">Role-based rules</text>
+  <text x="295" y="553" class="text">Quality thresholds</text>
+  <text x="295" y="578" class="text">Version safety</text>
+
+  <rect x="650" y="430" width="300" height="180" class="box"/>
+  <text x="675" y="468" class="cap">Feedback Loop</text>
+  <text x="675" y="500" class="title" style="font-size:22px">Learning &amp; Improvements</text>
+  <text x="675" y="528" class="text">Usage telemetry</text>
+  <text x="675" y="553" class="text">Template evolution</text>
+  <text x="675" y="578" class="text">Prompt refinement</text>
+
+  <path class="line" d="M320 240 H370"/>
+  <circle cx="370" cy="240" r="5" class="dot"/>
+  <path class="line" d="M620 240 H670"/>
+  <circle cx="670" cy="240" r="5" class="dot"/>
+  <path class="line" d="M920 240 H970"/>
+  <circle cx="970" cy="240" r="5" class="dot"/>
+
+  <path class="line" d="M780 310 V430"/>
+  <circle cx="780" cy="430" r="5" class="dot"/>
+  <path class="line" d="M520 430 V310"/>
+  <circle cx="520" cy="430" r="5" class="dot"/>
+  <path class="line" d="M570 520 H650"/>
+  <circle cx="650" cy="520" r="5" class="dot"/>
+
+  <path class="line" d="M950 520 Q1080 520 1080 360"/>
+  <text x="1008" y="346" class="text" style="font-size:15px">Publish</text>
+</svg>

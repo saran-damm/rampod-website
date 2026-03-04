@@ -1,4 +1,4 @@
-# Rampod Landing Page Plan (Light Premium, Future-Proof Dark)
+# rampod Landing Page Plan (Light Premium, Future-Proof Dark)
 
 ## Summary
 Build a high-performance static website for `www.rampod.co` using vanilla HTML/CSS/JS with a light premium look, saffron-led branding, balanced interaction design, and v1 single-product focus (`DocPod`).
