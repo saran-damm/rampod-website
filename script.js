@@ -71,61 +71,6 @@
     });
   }
 
-  function initSystemScroll() {
-    const orbit = document.getElementById("psychology-orbit");
-    if (!orbit || prefersReducedMotion || !window.gsap || !window.ScrollTrigger) return;
-
-    const nodes = orbit.querySelectorAll(".orbit-node");
-    const core = orbit.querySelector(".orbit-core");
-    const links = orbit.querySelectorAll(".orbit-links path");
-    if (!nodes.length || !core || !links.length) return;
-
-    const tl = window.gsap.timeline({
-      scrollTrigger: {
-        trigger: orbit,
-        start: "top 75%",
-        end: "bottom 45%",
-        scrub: true
-      }
-    });
-
-    tl.fromTo(core, { scale: 0.9, opacity: 0.75 }, { scale: 1, opacity: 1, ease: "none" })
-      .fromTo(nodes[0], { y: 30, opacity: 0.2 }, { y: 0, opacity: 1, ease: "none" })
-      .fromTo(nodes[1], { y: 30, opacity: 0.2 }, { y: 0, opacity: 1, ease: "none" })
-      .fromTo(nodes[2], { y: 30, opacity: 0.2 }, { y: 0, opacity: 1, ease: "none" });
-
-    window.gsap.fromTo(
-      links,
-      { strokeDashoffset: 40, opacity: 0.2 },
-      {
-        strokeDashoffset: 0,
-        opacity: 0.9,
-        stagger: 0.06,
-        ease: "none",
-        scrollTrigger: {
-          trigger: orbit,
-          start: "top 80%",
-          end: "bottom 50%",
-          scrub: true
-        }
-      }
-    );
-  }
-
-  function initPodCard() {
-    const card = document.getElementById("docpod-card");
-    const btn = document.getElementById("docpod-toggle");
-    if (!card || !btn) return;
-
-    const toggle = () => {
-      const expanded = card.classList.toggle("expanded");
-      card.setAttribute("aria-expanded", String(expanded));
-      btn.textContent = expanded ? "Hide architecture" : "View architecture";
-    };
-
-    btn.addEventListener("click", toggle);
-  }
-
   function initPodParallax() {
     const pod = document.getElementById("docpod-card");
     if (!pod || prefersReducedMotion || !window.gsap || !window.ScrollTrigger) return;
@@ -147,40 +92,6 @@
     );
   }
 
-  function initArchitectureViewer() {
-    const obj = document.getElementById("arch-svg");
-    const zoomIn = document.getElementById("arch-zoom-in");
-    const zoomOut = document.getElementById("arch-zoom-out");
-    const reset = document.getElementById("arch-reset");
-    if (!obj || !zoomIn || !zoomOut || !reset || typeof window.svgPanZoom === "undefined") return;
-
-    let viewer = null;
-
-    obj.addEventListener("load", () => {
-      const svg = obj.contentDocument && obj.contentDocument.querySelector("svg");
-      if (!svg) return;
-
-      viewer = window.svgPanZoom(svg, {
-        zoomEnabled: true,
-        panEnabled: true,
-        controlIconsEnabled: false,
-        fit: true,
-        center: true,
-        minZoom: 0.7,
-        maxZoom: 8
-      });
-    });
-
-    zoomIn.addEventListener("click", () => viewer && viewer.zoomIn());
-    zoomOut.addEventListener("click", () => viewer && viewer.zoomOut());
-    reset.addEventListener("click", () => {
-      if (!viewer) return;
-      viewer.resetZoom();
-      viewer.center();
-      viewer.fit();
-    });
-  }
-
   function showToast(message) {
     const toast = document.getElementById("toast");
     if (!toast) return;
@@ -192,6 +103,9 @@
   function initContactForm() {
     const form = document.getElementById("contact-form");
     if (!form) return;
+    const endpoint = form.getAttribute("data-endpoint");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const startedAt = Date.now();
 
     const fields = ["name", "email", "message"];
 
@@ -231,15 +145,56 @@
       return ok;
     };
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!validate()) {
         showToast("Please fix the highlighted fields.");
         return;
       }
-      form.reset();
-      clearErrors();
-      showToast("Thanks. We will get back to you soon.");
+
+      if (!endpoint) {
+        showToast("Contact form is not configured yet.");
+        return;
+      }
+
+      const fd = new FormData(form);
+      const payload = {
+        name: String(fd.get("name") || "").trim(),
+        email: String(fd.get("email") || "").trim(),
+        message: String(fd.get("message") || "").trim(),
+        companyWebsite: String(fd.get("company_website") || "").trim(),
+        elapsedMs: Date.now() - startedAt,
+        page: window.location.href
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+      }
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          showToast("Could not send right now. Please try again.");
+          return;
+        }
+
+        form.reset();
+        clearErrors();
+        showToast("Thanks. We will get back to you soon.");
+      } catch (_) {
+        showToast("Network error. Please try again.");
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send inquiry";
+        }
+      }
     });
   }
 
@@ -335,10 +290,7 @@
     initNav();
     initHeroTyping();
     initRevealAnimations();
-    initSystemScroll();
-    initPodCard();
     initPodParallax();
-    initArchitectureViewer();
     initContactForm();
     initBackgroundFX();
   }

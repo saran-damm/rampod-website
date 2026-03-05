@@ -1,0 +1,13 @@
+name = "rampod-contact"
+main = "contact-worker.js"
+compatibility_date = "2026-03-05"
+
+# Example route (configure your zone in Cloudflare)
+# routes = [
+#   { pattern = "api.rampod.co/contact", zone_name = "rampod.co" }
+# ]
+
+[vars]
+ALLOWED_ORIGIN = "https://rampod.co"
+CONTACT_TO_EMAIL = "you@rampod.co"
+CONTACT_FROM_EMAIL = "Rampod Contact <noreply@rampod.co>"
