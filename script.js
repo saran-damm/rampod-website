@@ -105,9 +105,8 @@
     if (!form) return;
     const endpoint = form.getAttribute("data-endpoint");
     const submitBtn = form.querySelector('button[type="submit"]');
-    const startedAt = Date.now();
 
-    const fields = ["name", "email", "message"];
+    const fields = ["name", "email", "workflow"];
 
     const setError = (name, msg) => {
       const slot = form.querySelector(`[data-error-for="${name}"]`);
@@ -121,7 +120,7 @@
       const fd = new FormData(form);
       const name = String(fd.get("name") || "").trim();
       const email = String(fd.get("email") || "").trim();
-      const message = String(fd.get("message") || "").trim();
+      const workflow = String(fd.get("workflow") || "").trim();
       let ok = true;
 
       if (!name) {
@@ -137,8 +136,8 @@
         ok = false;
       }
 
-      if (!message) {
-        setError("message", "Please describe the workflow.");
+      if (!workflow) {
+        setError("workflow", "Please describe the workflow.");
         ok = false;
       }
 
@@ -158,13 +157,17 @@
       }
 
       const fd = new FormData(form);
+      if (String(fd.get("company_website") || "").trim()) {
+        showToast("Thanks. We will get back to you soon.");
+        form.reset();
+        clearErrors();
+        return;
+      }
+
       const payload = {
         name: String(fd.get("name") || "").trim(),
         email: String(fd.get("email") || "").trim(),
-        message: String(fd.get("message") || "").trim(),
-        companyWebsite: String(fd.get("company_website") || "").trim(),
-        elapsedMs: Date.now() - startedAt,
-        page: window.location.href
+        workflow: String(fd.get("workflow") || "").trim()
       };
 
       if (submitBtn) {
